@@ -1,31 +1,36 @@
-import express from "express";
-import { NotFoundError } from "./expressError.js";
-import { add } from "./add.js";
-import {createBucket, putIntoBucket, readObject} from "./awss3.js"
-// import { createBucket } from "./awss3.js";
+"use strict";
 
+const express = require("express");
+const cors = require("cors");
+
+const { NotFoundError } = require("./expressError");
+
+const { putIntoBucket, readObject } = require("./awss3.js");
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
-/** Making a bucket route */
-app.post("/", function (req, res) {
-  const bucketName = req.body.bucketName;
-  createBucket(bucketName);
-});
+// TODO: add app.use for all routes
+// app.use("/auth", authRoutes)
 
-/** get a bucket */
-app.get("/", function (req, res, next) {
-  const bucketName = req.body.bucketName;
-  const key = req.body.key;
 
-  const readBucket = readObject; // TODO: change this
+
+// /** Making a bucket route */
+// app.post("/", function (req, res) {
+//   const bucketName = req.body.bucketName;
+//   createBucket(bucketName);
+// });
+
+/** Handle 404 errors -- this matches everything */
+app.use(function (req, res, next) {
+  throw new NotFoundError();
 });
 
 /** Generic error handler; anything unhandled goes here. */
 app.use(function (err, req, res, next) {
   if (process.env.NODE_ENV !== "test") console.error(err.stack);
-  /* istanbul ignore next (ignore for coverage) */
   const status = err.status || 500;
   const message = err.message;
 
@@ -34,4 +39,4 @@ app.use(function (err, req, res, next) {
   });
 });
 
-export default app;
+module.exports = app;
