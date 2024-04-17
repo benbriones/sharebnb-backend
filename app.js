@@ -23,18 +23,17 @@ const upload = multer({ storage: storage });
 
 // Assume you're posting to '/upload'
 app.post('/upload', upload.single('file'), async (req, res) => {
-  console.log(req.body); // Access text fields of form
-  console.log("*********req.file", req.file); // Access file details
+  // console.log("*********req.file", req.file); // Access file details
 
-  const data = await putIntoBucket("testKey5", req.file.buffer);
-  console.log("data", data);
+  const data = await putIntoBucket("testKey70", req.file.buffer);
   res.send('File uploaded and data received');
 });
 
 
 // /** Making a bucket route */
-app.get("/data", function (req, res) {
-  readObject("testKey4");
+app.get("/data", async function (req, res) {
+  await readObject("testKey5");
+  res.send("hello")
 });
 
 /** Handle 404 errors -- this matches everything */
