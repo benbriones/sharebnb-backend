@@ -24,7 +24,7 @@ CREATE TABLE bookings (
     property_id INTEGER NOT NULL
         REFERENCES properties ON DELETE CASCADE,
     guest_username VARCHAR(25) NOT NULL
-        REFERENCES users ON DELETE CASCADE
+        REFERENCES users ON DELETE CASCADE,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
 );
@@ -32,7 +32,6 @@ CREATE TABLE bookings (
 CREATE TABLE images (
     key TEXT NOT NULL PRIMARY KEY,
     caption TEXT DEFAULT 'image',
-    source TEXT NOT NULL,
     property_id INT NOT NULL
         REFERENCES properties ON DELETE CASCADE
 );

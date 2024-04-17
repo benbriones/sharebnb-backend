@@ -12,7 +12,7 @@ const { BadRequestError, NotFoundError } = require("../expressError");
  * ValidateBooking (for timeframes)
  * GetAllBookings
  * GetSingleBooking
- * Delete 
+ * Delete
  */
 
 class Booking {}

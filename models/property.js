@@ -106,7 +106,7 @@ class Property {
    * - maxPrice
    * - titleLike (will find case-insensitive, partial matches)
    *
-   * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   * Returns [{ title, address, description, price, owner }, ...]
    * */
 
   static async findAll(searchFilters = {}) {
@@ -121,13 +121,105 @@ class Property {
     });
 
     const propertiesRes = await db.query(`
-          SELECT title,
-                 address,
-                 description,
-                 price,
-                 owner
-          FROM properties ${where}
-          ORDER BY title`, vals);
+          SELECT p.id,
+                p.title,
+                 p.address,
+                 p.description,
+                 p.price,
+                 p.owner,
+                 JSON_AGG(i.key) AS "keys"
+          FROM properties AS p
+          FULL JOIN images AS i ON i.property_id = p.id
+          ${where}
+          GROUP BY p.id
+          ORDER BY p.title`, vals);
     return propertiesRes.rows;
   }
+
+   /** Given a property id, return data about property.
+   *
+   * Returns { title, address, description, price, owner, images }
+   *   where images is [{ key, caption}, ...]
+   *
+   * Throws NotFoundError if not found.
+   **/
+
+   static async get(id) {
+    const propertyRes = await db.query(`
+        SELECT title,
+               address,
+               description,
+               price,
+               owner
+        FROM properties
+        WHERE id = $1`, [id]);
+
+    const property = propertyRes.rows[0];
+
+    if (!property) throw new NotFoundError(`No property: ${id}`);
+
+    const imagesRes = await db.query(`
+        SELECT key, caption
+        FROM images
+        WHERE property_id = $1
+        ORDER BY key`, [id],
+    );
+
+    property.images = imagesRes.rows;
+
+    return property;
+  }
+
+  /** Update property data with `data`.
+   *
+   * This is a "partial update" --- it's fine if data doesn't contain all the
+   * fields; this only changes provided ones.
+   *
+   * Data can include: {title, description, address, price}
+   *
+   * Returns {id, title, description, address, price, owner}
+   *
+   * Throws NotFoundError if not found.
+   */
+
+  static async update(id, data) {
+    const { setCols, values } = sqlForPartialUpdate(data, {});
+    const handleVarIdx = "$" + (values.length + 1);
+
+    const querySql = `
+        UPDATE properties
+        SET ${setCols}
+        WHERE id = ${handleVarIdx}
+        RETURNING
+            id,
+            title,
+            description,
+            address,
+            price,
+            owner`;
+    const result = await db.query(querySql, [...values, id]);
+    const property = result.rows[0];
+
+    if (!property) throw new NotFoundError(`No property: ${id}`);
+
+    return property;
+  }
+
+  /** Delete given property from database; returns undefined.
+   *
+   * Throws NotFoundError if property not found.
+   **/
+
+  static async remove(id) {
+    const result = await db.query(`
+        DELETE
+        FROM properties
+        WHERE id = $1
+        RETURNING id`, [id]);
+    const property = result.rows[0];
+
+    if (!property) throw new NotFoundError(`No property: ${id}`);
+  }
 }
+
+module.exports = Property;

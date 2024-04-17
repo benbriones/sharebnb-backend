@@ -10,6 +10,8 @@ const { putIntoBucket, readObject } = require("./awss3.js");
 
 const app = express();
 
+ const Property  = require( "./models/property.js");
+
 app.use(cors());
 app.use(express.json());
 
@@ -30,10 +32,22 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 
+// app.get('/property', async (req, res) => {
+//   const properties = await Property.findAll({titleLike: "O"});
+//   return res.send({ properties });
+
+// });
+
+app.get('/property', async (req, res) => {
+  const property = await Property.get(3);
+  return res.send({ property });
+});
+
+
 // /** Making a bucket route */
 app.get("/data", async function (req, res) {
   await readObject("testKey5");
-  res.send("hello")
+  res.send("hello");
 });
 
 /** Handle 404 errors -- this matches everything */
