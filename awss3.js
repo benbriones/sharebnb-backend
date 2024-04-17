@@ -1,19 +1,17 @@
 "use strict";
 
-import { createInterface } from "readline/promises";
-import {
+const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
-  CreateBucketCommand
-} from "@aws-sdk/client-s3";
+} = require("@aws-sdk/client-s3");
 
 require("dotenv").config();
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: "us-west-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -32,30 +30,39 @@ const s3Client = new S3Client({
 // }
 
 /** AWS function to add a new object into an S3 bucket.
- * Takes key (unique key) and body (link)
+ * Takes key (unique key) and file
  */
-async function putIntoBucket(key, body) {
-  await s3Client.send(
-    new PutObjectCommand({
-      Bucket: bucketName,
-      Key: key,
-      Body: body
-    })
-  );
+async function putIntoBucket(key, file) {
+  const data = new PutObjectCommand({
+    Bucket: bucketName,
+    ContentType: "image/jpg",
+    Tagging: "public=yes",
+    Key: key,
+    Body: file
+  });
+  try {
+    const result = await s3Client.send(
+      data);
+      console.log("result", result)
+  } catch (error) {
+    console.log("putIntoBucket errors: ", error);
+  }
 }
 
 /** AWS function to read specific object from an S3 bucket.
  * Takes key (unique key) of object to read.
 */
 async function readObject(key) {
-  const { Body } = await S3Client.send(
+  const { Body } = await s3Client.send(
     new GetObjectCommand({
       Bucket: bucketName,
       Key: key,
     })
   );
 
-  console.log(String(Body)); // await?
+  // const resp = await Body.json();
+
+  console.log(("*********BODY", Body)); // await?
 }
 
 module.exports = { putIntoBucket, readObject };
