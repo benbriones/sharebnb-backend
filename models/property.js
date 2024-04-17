@@ -128,7 +128,7 @@ class Property {
                  p.description,
                  p.price,
                  p.owner,
-                 JSON_AGG(i.key) AS "keys"
+                 JSON_AGG(i.key) AS "images"
           FROM properties AS p
           FULL JOIN images AS i ON i.property_id = p.id
           ${where}
@@ -160,7 +160,7 @@ class Property {
     if (!property) throw new NotFoundError(`No property: ${id}`);
 
     const imagesRes = await db.query(`
-        SELECT key, caption
+        SELECT key
         FROM images
         WHERE property_id = $1
         ORDER BY key`, [id],

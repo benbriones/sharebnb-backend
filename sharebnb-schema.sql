@@ -31,7 +31,6 @@ CREATE TABLE bookings (
 
 CREATE TABLE images (
     key TEXT NOT NULL PRIMARY KEY,
-    caption TEXT DEFAULT 'image',
     property_id INT NOT NULL
         REFERENCES properties ON DELETE CASCADE
 );

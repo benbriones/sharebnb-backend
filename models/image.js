@@ -8,14 +8,14 @@ const db = require("../db");
 class Image {
   /** Create an image (from data), update db, return new image data.
     *
-    * data should be { key, caption, propertyId }
+    * data should be { key, propertyId }
     *
-    * Returns { key, caption, propertyId }
+    * Returns { key, propertyId }
     *
     * Throws BadRequestError if image already in database.
     * */
 
-  static async create({ key, caption, propertyId }) {
+  static async create({ key, propertyId }) {
 
     const duplicateCheck = await db.query(`
       SELECT key
@@ -27,10 +27,10 @@ class Image {
     }
 
     const result = await db.query(`
-    INSERT INTO images (key, caption, property_id)
-      VALUES ($1, $2, $3)
-      RETURNING key, caption, property_id AS propertyId`,
-      [key, caption, propertyId]);
+    INSERT INTO images (key, property_id)
+      VALUES ($1, $2)
+      RETURNING key, property_id AS propertyId`,
+      [key, propertyId]);
 
     const image = result.rows[0];
     return image;

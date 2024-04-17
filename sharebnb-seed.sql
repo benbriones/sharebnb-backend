@@ -11,9 +11,9 @@ VALUES
     ('bad oasis', '123 bad street, indio', 'bad1', 300, 'testUser2'),
     ('worse oasis', '123 worse street, indio', 'worse1', 350, 'adminUser');
 
-INSERT INTO images (key, caption, property_id)
+INSERT INTO images (key, property_id)
 VALUES
-    ('horse.jpg', 'cool horse', 1),
-    ('horseRider.jpg', 'horseRider', 2),
-    ('testKey5', 'this is a test', 3),
-    ('testKey70', 'second image for proprerty3', 3)
+    ('horse.jpg', 1),
+    ('horseRider.jpg', 2),
+    ('testKey5', 3),
+    ('testKey70', 3)
