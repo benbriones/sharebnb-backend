@@ -1,5 +1,7 @@
 "use strict";
 
+/** Routes for bookings. */
+
 const Booking = require('../models/booking')
 const express = require("express");
 const { BadRequestError } = require("../expressError");

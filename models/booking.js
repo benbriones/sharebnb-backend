@@ -17,8 +17,11 @@ const { BadRequestError, NotFoundError } = require("../expressError");
  */
 
 class Booking {
-  /**
+  /** Validates a potential booking
    *
+   * Takes in as parameters: { propertyId,  startDate, endDate }
+   *
+   * If there are preexisting, interfering bookings, throws Bad Request Error
    */
 
   static async _validateBooking({ propertyId, startDate, endDate }) {

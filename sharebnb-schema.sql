@@ -6,7 +6,7 @@ CREATE TABLE users (
     phone VARCHAR(13),
     email TEXT NOT NULL
         CHECK (position('@' IN email) > 1),
-     is_admin BOOLEAN NOT NULL DEFAULT FALSE
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE properties (

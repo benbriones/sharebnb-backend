@@ -29,7 +29,7 @@ class User {
 
   /** authenticate user with username, password.
    *
-   * Returns { username, first_name, last_name, email, phone, is_admin }
+   * Returns { username, firstName, lastName, email, phone, isAdmin }
    *
    * Throws UnauthorizedError is user not found or wrong password.
    */
@@ -117,7 +117,7 @@ class User {
 
   /** Find all users.
    *
-   * Returns [{ username, first_name, last_name, email, phone, is_admin }, ...]
+   * Returns [{ username, firstName, lastName, email, phone, isAdmin }, ...]
    **/
 
   static async findAll() {
@@ -127,7 +127,7 @@ class User {
                last_name  AS "lastName",
                email,
                phone,
-               is_admin   AS "isAdmin"
+               is_admin AS "isAdmin"
         FROM users
         ORDER BY username`,
     );
@@ -137,9 +137,9 @@ class User {
 
   /** Given a username, return data about user.
    *
-   * Returns { username, first_name, last_name, email,
-   *          phone, is_admin, bookings, properties }
-   *   where bookings is [{ id, property_id, guest_username, start_date, end_date }... ]
+   * Returns { username, firstName, lastName, email,
+   *          phone, isAdmin, bookings, properties }
+   *   where bookings is [{ id, propertyId, guestUsername, startDate, endDate }... ]
    *   where properties is [{ id, title, address, description, price, owner }... ]
    *
    * Throws NotFoundError if user not found.
@@ -165,7 +165,12 @@ class User {
     const userBookingsRes = await db.query(`
         SELECT b.id
         FROM bookings AS b
-        WHERE b.guest_username = $1`, [username]);
+        WHERE b.guest_username = $1
+        RETURNING id,
+                  property_id AS "propertyId",
+                  guest_username AS "guestUsername",
+                  start_date AS "startDate",
+                  end_date AS "endDate"`, [username]);
 
     user.bookings = userBookingsRes.rows.map(b => b.id);
 
