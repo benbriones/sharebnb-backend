@@ -25,6 +25,8 @@ CREATE TABLE bookings (
         REFERENCES properties ON DELETE CASCADE,
     guest_username VARCHAR(25) NOT NULL
         REFERENCES users ON DELETE CASCADE
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
 );
 
 CREATE TABLE images (
