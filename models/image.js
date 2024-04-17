@@ -2,9 +2,18 @@
 
 const db = require("../db");
 
+
 /** related functions for images */
 
 class Image {
+  /** Create an image (from data), update db, return new image data.
+    *
+    * data should be { key, caption, propertyId }
+    *
+    * Returns { key, caption, propertyId }
+    *
+    * Throws BadRequestError if image already in database.
+    * */
 
   static async create({ key, caption, propertyId }) {
 
@@ -27,3 +36,5 @@ class Image {
     return image;
   }
 }
+
+module.exports = Image;

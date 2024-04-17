@@ -10,8 +10,8 @@ const {
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
-/** Related functions for users */
 
+/** Related functions for users */
 
 /** Methods:
  *
@@ -245,3 +245,5 @@ class User {
   }
 
 }
+
+module.exports = User;

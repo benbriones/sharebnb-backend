@@ -11,6 +11,7 @@ const { putIntoBucket, readObject } = require("./awss3.js");
 const app = express();
 
  const Property  = require( "./models/property.js");
+ const Booking = require("./models/booking.js");
 
 app.use(cors());
 app.use(express.json());
@@ -42,6 +43,13 @@ app.get('/property', async (req, res) => {
   const property = await Property.get(3);
   return res.send({ property });
 });
+
+// yyyy-mm-dd
+app.post('/newbooking', async (req, res) => {
+  const booking = await Booking.create(
+    {guestUsername: "testUser2", propertyId: 1, startDate: "2024-10-30", endDate: "2024-12-20"});
+  return res.send({ booking });
+})
 
 
 // /** Making a bucket route */

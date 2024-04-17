@@ -4,8 +4,8 @@ const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 
-/** Related functions for properties */
 
+/** Related functions for properties */
 
 /** Methods:
  *
@@ -15,6 +15,7 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
  * Update
  * Delete
  */
+
 class Property {
   /** Create a property (from data), update db, return new property data.
      *
@@ -68,8 +69,8 @@ class Property {
    * - titleLike (will find case-insensitive, partial matches)
    *
    * Returns {
-   *  where: "WHERE num_employees >= $1 AND name ILIKE $2",
-   *  vals: [100, '%Apple%']
+   *  where: "WHERE price >= $1 AND title ILIKE $2",
+   *  vals: [100, '%Oasis%']
    * }
    */
 
@@ -136,15 +137,15 @@ class Property {
     return propertiesRes.rows;
   }
 
-   /** Given a property id, return data about property.
-   *
-   * Returns { title, address, description, price, owner, images }
-   *   where images is [{ key, caption}, ...]
-   *
-   * Throws NotFoundError if not found.
-   **/
+  /** Given a property id, return data about property.
+  *
+  * Returns { title, address, description, price, owner, images }
+  *   where images is [{ key, caption}, ...]
+  *
+  * Throws NotFoundError if not found.
+  **/
 
-   static async get(id) {
+  static async get(id) {
     const propertyRes = await db.query(`
         SELECT title,
                address,
