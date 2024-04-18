@@ -4,8 +4,8 @@
 
 const Booking = require('../models/booking');
 const express = require("express");
-const { BadRequestError } = require("../expressError");
-const { ensureLoggedIn, ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
+const { UnauthorizedError } = require("../expressError");
+const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
@@ -55,12 +55,18 @@ router.get('/',
  * Authorization required: admin or same user-as-:username
  */
 
-// TODO: admin currently has capabilities but correct user is getting unauth
 router.get('/:id',
-  ensureCorrectUserOrAdmin,
+  ensureLoggedIn,
   async function (req, res) {
     const booking = await Booking.get(req.params.id);
-    return res.send({ booking });
+
+    const user = res.locals.user;
+    const username = res.locals.user?.username;
+    if (username && (username === booking.guestUsername || user.isAdmin === true)) {
+      return res.send({ booking });
+    } else {
+      throw new UnauthorizedError();
+    }
   });
 
 module.exports = router;

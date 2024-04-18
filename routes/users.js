@@ -8,7 +8,8 @@ const { BadRequestError } = require("../expressError");
 const router = new express.Router();
 const {
   ensureCorrectUserOrAdmin,
-  ensureAdmin
+  ensureAdmin,
+  ensureLoggedIn
 } = require("../middleware/auth.js");
 
 
@@ -19,7 +20,6 @@ const {
  * Authorization required: admin
  **/
 
-// TODO: ensureAdmin not working - getting unauth
 router.get("/",
   ensureAdmin,
   async function (req, res, next) {
