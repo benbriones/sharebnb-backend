@@ -27,7 +27,6 @@ function authenticateJWT(req, res, next) {
     }
   }
   return next();
-
 }
 
 /** Middleware to use when they must be logged in.

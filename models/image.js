@@ -1,9 +1,13 @@
 "use strict";
 
+/** Related functions for images
+ *
+ * Methods:
+ * - create
+*/
+
 const db = require("../db");
 
-
-/** related functions for images */
 
 class Image {
   /** Create an image (from data), update db, return new image data.

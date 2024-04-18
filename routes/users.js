@@ -19,10 +19,13 @@ const {
  * Authorization required: admin
  **/
 
-router.get("/", ensureAdmin, async function (req, res, next) {
-  const users = await User.findAll();
-  return res.json({ users });
-});
+// TODO: ensureAdmin not working - getting unauth
+router.get("/",
+  ensureAdmin,
+  async function (req, res, next) {
+    const users = await User.findAll();
+    return res.json({ users });
+  });
 
 /** GET /[username] => { user }
  *
@@ -33,9 +36,11 @@ router.get("/", ensureAdmin, async function (req, res, next) {
  * Authorization required: admin or same user-as-:username
  **/
 
-router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
-  const user = await User.get(req.params.username);
-  return res.json({ user });
-});
+router.get("/:username",
+  ensureCorrectUserOrAdmin,
+  async function (req, res, next) {
+    const user = await User.get(req.params.username);
+    return res.json({ user });
+  });
 
 module.exports = router;

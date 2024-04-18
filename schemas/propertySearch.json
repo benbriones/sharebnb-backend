@@ -3,19 +3,19 @@
     "$id": "http://our.company.com/companySearch.schema.json",
     "type": "object",
     "properties": {
-      "minPrice": {
-        "type": "integer",
-        "minimum": 0
-      },
-      "maxPrice": {
-        "type": "integer",
-        "minimum": 0
-      },
-      "titleLike": {
-        "type": "string",
-        "minLength": 1
-      }
+        "minPrice": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "maxPrice": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "titleLike": {
+            "type": "string",
+            "minLength": 1
+        }
     },
     "additionalProperties": false,
     "required": []
-  }
+}

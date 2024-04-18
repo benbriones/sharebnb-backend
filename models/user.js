@@ -1,5 +1,18 @@
 "use strict";
 
+/** Related functions for users
+ *
+ * Methods:
+ * - authenticate
+ * - register
+ * - findAll
+ * - get
+ * - update
+ * - remove
+ *
+ * TODO: possibly build out methods for messagesTo and messagesFrom
+ */
+
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const sqlForPartialUpdate = require("../helpers/sql.js");
@@ -10,20 +23,6 @@ const {
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
-
-/** Related functions for users */
-
-/** Methods:
- *
- * Register
- * Authenticate
- * Get all users
- * Get single user (by username)
- * Update
- * Remove
- * Messages to
- * Messages from
- */
 
 class User {
 
@@ -163,14 +162,13 @@ class User {
 
     // user bookings
     const userBookingsRes = await db.query(`
-        SELECT b.id
-        FROM bookings AS b
-        WHERE b.guest_username = $1
-        RETURNING id,
-                  property_id AS "propertyId",
-                  guest_username AS "guestUsername",
-                  start_date AS "startDate",
-                  end_date AS "endDate"`, [username]);
+        SELECT id,
+               property_id AS "propertyId",
+               guest_username AS "guestUsername",
+               start_date AS "startDate",
+               end_date AS "endDate"
+        FROM bookings
+        WHERE guest_username = $1`, [username]);
 
     user.bookings = userBookingsRes.rows.map(b => b.id);
 

@@ -2,12 +2,14 @@
 
 /** Routes for authentication. */
 
-const User = require('../models/user')
 const express = require("express");
+const jsonschema = require("jsonschema");
+
+const User = require('../models/user');
 const { BadRequestError } = require("../expressError");
 const userAuthSchema = require("../schemas/userAuth.json");
 const userRegisterSchema = require("../schemas/userRegister.json");
-const { createToken } = require("../helpers/token.js")
+const { createToken } = require("../helpers/token.js");
 
 const router = new express.Router();
 
@@ -23,7 +25,7 @@ router.post("/login", async function (req, res, next) {
   const validator = jsonschema.validate(
     req.body,
     userAuthSchema,
-    {required: true}
+    { required: true }
   );
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
@@ -50,7 +52,7 @@ router.post("/register", async function (req, res, next) {
   const validator = jsonschema.validate(
     req.body,
     userRegisterSchema,
-    {required: true}
+    { required: true }
   );
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);

@@ -1,20 +1,18 @@
 "use strict";
 
+/** Related functions for bookings
+ *
+ * Methods:
+ * - _validateBooking
+ * - create
+ * - get
+ * - remove
+*/
+
 const db = require("../db");
 const { formatDate } = require("../helpers/date");
 const { BadRequestError, NotFoundError } = require("../expressError");
 
-
-/** Related functions for bookings */
-
-/** Methods:
- *
- * Create
- * ValidateBooking (for timeframes)
- * GetAllBookings
- * GetSingleBooking
- * Delete
- */
 
 class Booking {
   /** Validates a potential booking
@@ -63,34 +61,65 @@ class Booking {
     await this._validateBooking({ propertyId, startDate, endDate });
 
     const result = await db.query(`
-              INSERT INTO bookings (guest_username,
-                                    property_id,
+              INSERT INTO bookings (property_id,
+                                    guest_username,
                                     start_date,
                                     end_date)
               VALUES ($1, $2, $3, $4)
               RETURNING
                   id,
-                  guest_username as "guestUsername",
                   property_id as "propertyId",
+                  guest_username as "guestUsername",
                   start_date as "startDate",
                   end_date as "endDate"`, [
-      guestUsername,
       propertyId,
+      guestUsername,
       startDate,
       endDate,
     ],
     );
     const booking = result.rows[0];
 
+    booking.startDate = formatDate(booking.startDate);
+    booking.endDate = formatDate(booking.endDate);
     return booking;
   }
 
-  /** gets a single booking
+
+  /** Get all bookings
    *
-   * takes an id
-   * returns {id, propertyId, guestUseranme, startDate, endDate}
+   * Returns [{id, propertyId, guestUseranme, startDate, endDate}, ...]
    *
    */
+
+  static async getAll() {
+
+    const result = await db.query(`
+              SELECT id,
+                      property_id AS "propertyID",
+                      guest_username AS "guestUsername",
+                      start_date AS "startDate",
+                      end_date AS "endDate"
+              FROM bookings
+              ORDER BY id`,
+    );
+
+    const bookings = result.rows;
+    bookings.map(b => {
+      b.startDate = formatDate(b.startDate);
+      b.endDate = formatDate(b.endDate);
+    });
+
+    return bookings;
+  }
+
+  /** Get a single booking, by Id
+   *
+   * Returns {id, propertyId, guestUseranme, startDate, endDate}
+   *
+   * Throws Not Found Error if no booking matching ID exists
+   */
+
   static async get(id) {
 
     const result = await db.query(`
@@ -114,7 +143,6 @@ class Booking {
   /** Delete given booking from database; returns undefined.
    *
    * Throws NotFoundError if booking not found.
-   *
    **/
 
   static async remove(id) {

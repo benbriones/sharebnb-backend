@@ -1,27 +1,27 @@
 "use strict";
 
+/** Related functions for properties
+ *
+ * Methods:
+ * - create
+ * - _filterWhereBuilder
+ * - findAll
+ * - get
+ * - update
+ * - remove
+ */
+
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 
-
-/** Related functions for properties */
-
-/** Methods:
- *
- * Create
- * FindAll
- * Get (by specific ID)
- * Update
- * Delete
- */
 
 class Property {
   /** Create a property (from data), update db, return new property data.
      *
      * data should be { title, address, description, price, owner }
      *
-     * Returns { title, address, description, price, owner }
+     * Returns { id, title, address, description, price, owner }
      *
      * Throws BadRequestError if property already in database.
      * */
@@ -43,6 +43,7 @@ class Property {
                                      owner)
               VALUES ($1, $2, $3, $4, $5)
               RETURNING
+                  id,
                   title,
                   address,
                   description,
@@ -166,7 +167,7 @@ class Property {
         ORDER BY key`, [id],
     );
 
-    property.images = imagesRes.rows;
+    property.images = imagesRes.rows.map(row => row.key);
 
     return property;
   }

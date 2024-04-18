@@ -1,9 +1,8 @@
 INSERT INTO users (username, password, first_name, last_name, email, phone, is_admin)
 VALUES
-    ('testUser1', 'password1', 'first1', 'last1', 'e@e.com', '8187172020', FALSE),
-    ('testUser2', 'password2', 'first2', 'last2', 'e@e.com', '8187172020', FALSE),
-    ('adminUser', 'password3', 'first3', 'last3', 'e@e.com', '8187172020', TRUE);
-
+    ('testUser1', '$2b$12$ZrgLN.tR45zznBNxED1/BeWUc0KXe7TP1xfc5dPbIoH0hKdYfcDJy', 'first1', 'last1', 'e@e.com', '8187172020', FALSE),
+    ('testUser2', '$2b$12$ZrgLN.tR45zznBNxED1/BeWUc0KXe7TP1xfc5dPbIoH0hKdYfcDJy', 'first2', 'last2', 'e@e.com', '8187172020', FALSE),
+    ('adminUser', '$2b$12$ZrgLN.tR45zznBNxED1/BeWUc0KXe7TP1xfc5dPbIoH0hKdYfcDJy', 'first3', 'last3', 'e@e.com', '8187172020', TRUE);
 
 INSERT INTO properties (title, address, description, price, owner)
 VALUES
