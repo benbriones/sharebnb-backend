@@ -4,7 +4,7 @@
 
 const User = require('../models/user');
 const express = require("express");
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, NotFoundError } = require("../expressError");
 const router = new express.Router();
 const {
   ensureCorrectUserOrAdmin,
@@ -40,6 +40,7 @@ router.get("/:username",
   ensureCorrectUserOrAdmin,
   async function (req, res, next) {
     const user = await User.get(req.params.username);
+    if (!user) throw new NotFoundError(`no such user: ${req.params.username}`)
     return res.json({ user });
   });
 
