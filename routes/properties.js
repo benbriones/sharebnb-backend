@@ -35,11 +35,13 @@ router.post("/",
   ensureLoggedIn,
   upload.array('images', 5),
   async function (req, res, next) {
+    console.log("*****req.body CREATE", req.body);
+    console.log("*****req.files CREATE", req.files);
     const q = req.body;
     q.price = +q.price;
-    
+
     const validator = jsonschema.validate(
-      req.body,
+      q,
       propertyCreateSchema,
       { required: true }
     );
