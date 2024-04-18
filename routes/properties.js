@@ -88,7 +88,7 @@ router.get('/', async function (req, res) {
   if (q.minPrice !== undefined) q.minPrice = +q.minPrice;
   if (q.maxPrice !== undefined) q.maxPrice = +q.maxPrice;
 
-  console.log("1234", propertySearchSchema);
+
   const validator = jsonschema.validate(
     q,
     propertySearchSchema,
