@@ -170,7 +170,8 @@ class User {
         FROM bookings
         WHERE guest_username = $1`, [username]);
 
-    user.bookings = userBookingsRes.rows.map(b => b.id);
+    // user.bookings = userBookingsRes.rows.map(b => b.id);
+    user.bookings = userBookingsRes.rows
 
     // user properties
     const userPropertiesRes = await db.query(`
